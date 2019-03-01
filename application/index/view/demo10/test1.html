@@ -1,0 +1,34 @@
+{include file="public::header" /}
+            {include file="public::nav" /}
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="page-header">
+                        <h2>
+                            {$cateName}
+                        </h2>
+                        
+                        
+                    </div>
+                    {volist name="artList" id="art" empty="$empty"}
+
+                    <div>
+                        <img class="img-rounded" src="/web/public/uploads/{$art.title_image}" style="margin-right:20px;float:left;width:100px;height:85px">
+                     <div style="float:left;width:80%;margin-top:-8px">
+                            <h4><a href="{:url('demo10/detail',['id'=>$art.id])}" target="_top">{$art.title}</a></h4>
+                            <div style="padding-bottom:1em;display: flex;justify-content:space-between">
+                        <span>发布者:{$art.user_id|getUserName}<span class="glyphicon glyphicon-education" style="padding:0 1em">Lv{$art.user_id|getUserLv}</span>发布时间:{$art.create_time|date='Y-m-d'}</span>
+                           <span>阅读量:{$art.pv}</span>
+                       </div>
+                        <div style="font-weight: 700;font-style: italic">
+                            {$art.content|getArtContent}
+                        </div>
+                        <hr>
+                     </div>
+
+                    </div>
+                    {/volist}
+                    <div class="text-center">{$artList|raw}</div>
+                </div>
+                {include file="public::right" /}
+            </div>
+        {include file="public::footer" /}

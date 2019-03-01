@@ -1,0 +1,186 @@
+{include file="public::header" /}
+            {include file="public::nav" /}
+            <div class="row">
+    <div class="col-md-8">
+        <div class="page-header">
+            <h2>
+                用户注册
+            </h2>
+        </div>
+        <form class="form-horizontal" method="post" id="reg">
+            <div class="form-group">
+                <label for="inputEmail1" class="col-sm-2 control-label">
+                    用户名:
+                </label>
+                <div class="col-sm-10">
+                    <input type="text" name="name" class="form-control" id="inputEmail1" placeholder="用户名">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputEmail2" class="col-sm-2 control-label">
+                    Email:
+                </label>
+                <div class="col-sm-10">
+                    <input type="text" name="email" class="form-control" id="inputEmail2" placeholder="Email">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputEmail3" class="col-sm-2 control-label">
+                    手机号:
+                </label>
+                <div class="col-sm-10">
+                    <input type="text" name="mobile" class="form-control" id="inputEmail3" placeholder="手机号">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputPassword4" class="col-sm-2 control-label">
+                    密码:
+                </label>
+                <div class="col-sm-10">
+                    <input type="password" name="password" class="form-control" id="inputPassword4" placeholder="密码">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputPassword5" class="col-sm-2 control-label">
+                    确认密码:
+                </label>
+                <div class="col-sm-10">
+                    <input type="password" name="password_confirm" class="form-control" id="inputPassword5" placeholder="确认密码">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <button type="submit" class="btn btn-primary" id="regis">
+                        注册
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <script>
+    $.validator.setDefaults({
+    submitHandler: function() {
+           $.ajax({
+                type:'post',
+                //url:"/web/public/index/User/insert",
+                url:"{:url('index/user/insert')}",
+                data:$('#reg').serialize(),
+                dataType:'json',
+                success:function(data)
+                {
+                    switch(data.status)
+                    {
+                        case 1:
+                        console.log(data.message);
+                        window.location.href="{:url('index/demo10/test1')}";
+                        break;
+                        case 0:
+                        case -1:
+                        alert(data.message);
+                        //window.location.back(); 
+                    }
+                    
+                },
+                error: function(e){
+                    console.log(e);
+                }
+            })
+    }   
+});
+$().ready(function() {
+// 在键盘按下并释放及提交后验证提交表单
+jQuery.validator.addMethod("isMobile", function(value, element) {  
+ var length = value.length;  
+ var mobile = /^(13[0-9]{9})|(18[0-9]{9})|(14[0-9]{9})|(17[0-9]{9})|(15[0-9]{9})$/;  
+ return this.optional(element) || (length == 11 && mobile.test(value));  
+}, "请正确填写手机号码");
+  $("#reg").validate({
+    rules: {
+      name: {
+        required: true,
+        minlength: 3,
+        maxlength: 10
+      },
+      email: {
+        required: true,
+        email: true
+      },
+      mobile: {
+        required: true,
+        minlength : 11, 
+        isMobile : true
+      },
+      password: {
+        required: true,
+        minlength: 6,
+        maxlength: 15
+      },
+      password_confirm: {
+        required: true,
+        equalTo: "#inputPassword4"
+      }
+  },
+    messages: {
+      name: {
+        required: "请输入用户名",
+        minlength: "用户名必需由3个字母组成",
+        maxlength: "用户名过长"
+      },
+    mobile: {
+        required : "请输入手机号",  
+        minlength : "不能小于11个字符",  
+        isMobile : "请正确填写手机号码"
+      },
+      password: {
+        required: "请输入密码",
+        minlength: "密码长度不能小于 6 个字母",
+        maxlength: "密码过长"
+      },
+      password_confirm: {
+        required: "请输入密码",
+        equalTo: "两次密码输入不一致"
+      },
+      email: "请输入一个正确的邮箱"
+     }
+    })
+})
+
+    // $(function()
+    // {
+    //     $("#regis").on('click',function(e)
+    //     {
+    //         //alert($('#reg').serialize());
+    //         e.preventDefault();
+    //         $.ajax({
+    //             type:'post',
+    //             //url:"/web/public/index/User/insert",
+    //             url:"{:url('index/user/insert')}",
+    //             data:$('#reg').serialize(),
+    //             dataType:'json',
+    //             success:function(data)
+    //             {
+    //                 switch(data.status)
+    //                 {
+    //                     case 1:
+    //                     console.log(data.message);
+    //                     window.location.href="{:url('index/demo10/test1')}";
+    //                     break;
+    //                     case 0:
+    //                     case -1:
+    //                     alert(data.message);
+    //                     //window.location.back(); 
+    //                 }
+                    
+    //             },
+    //             error: function(e){
+    //                 console.log(e);
+    //             }
+    //         })
+    //     })
+        
+    // })
+    </script>
+                {include file="public::right" /}
+            </div>
+        {include file="public::footer" /}

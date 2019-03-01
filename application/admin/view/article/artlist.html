@@ -1,0 +1,45 @@
+{layout name="public:layout" /}
+<h4 class="text-center text-success">文章管理</h4>
+<table class="table table-default table-hover text-center">
+	<tr>
+		<td>ID</td>
+		<td>标题</td>
+		<td>栏目</td>
+		{eq name="$Think.session.is_admin" value="1"}
+		<td>作者</td>
+		{/eq}
+		<td>阅读量</td>
+		<td>创建时间</td>
+		<td colspan="2">操作</td>
+	</tr>
+	{volist name="artList" id="art" empty="$empty"}
+	<tr>
+		<td>{$art.id}</td>
+		<td>{$art.title}</td>
+		<td>{$art.cate_id|getCateName}</td>
+		{eq name="$Think.session.is_admin" value="1"}
+		<td>{$art.user_id|getUserName}</td>
+		{/eq}
+		<td>{$art.pv}</td>
+		<td>{$art.create_time}</td>
+		<!-- 非当前用户不允许编辑其他人信息
+		eq标签：如果相等   neq标签：如果不相等 -->
+		
+		<td><a href="{:url('article/artEdit',['id'=>$art.id])}">编辑</a></td>
+		<td><a href="javascript:void(0);" uid="{$art.id}" onclick="dele(this);return false">删除</a></td>
+	</tr>
+	{/volist}
+</table>
+
+<div class="text-center">{$artList|raw}</div>
+
+<script>
+	function dele(t)
+	{
+		var uid = $(t).attr("uid");
+		if(confirm('确定删除吗?')==true)
+		{
+			window.location.href="/web/public/admin/article/dodelete?id="+uid;
+		}
+	}
+</script>

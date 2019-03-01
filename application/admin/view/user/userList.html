@@ -1,0 +1,49 @@
+{layout name="public:layout" /}
+<h4 class="text-center text-success">用户列表</h4>
+<table class="table table-default table-hover text-center">
+	<tr>
+		<td>ID</td>
+		<td>用户名</td>
+		<td>邮箱</td>
+		<td>手机号</td>
+		<td>注册时间</td>
+		<td>状态</td>
+		<td>身份</td>
+		<td colspan="2">操作</td>
+	</tr>
+	{volist name="userList" id="user" empty="$empty"}
+	<tr>
+		<td>{$user.id}</td>
+		<td>{$user.name}</td>
+		<td>{$user.email}</td>
+		<td>{$user.mobile}</td>
+		<td>{$user.create_time}</td>
+		<td>{$user.status}</td>
+		<td>
+			{eq name="$user.is_admin" value="0"}
+			<span style="color:green">注册会员</span> 
+			{else/}
+			<span style="color:red">管理员</span> 
+			{/eq}
+		</td>
+		<!-- 非当前用户不允许编辑其他人信息
+		eq标签：如果相等   neq标签：如果不相等 -->
+		{eq name="$user.id" value="$Think.session.user_id"}
+		<td><a href="{:url('user/userEdit',['id'=>$user.id])}">编辑</a></td>
+		{/eq}
+		{neq name="$user.id" value="$Think.session.user_id"}
+		<td><a href="javascript:void(0);" uid="{$user.id}" onclick="dele(this);return false">删除</a></td>
+		{/neq}
+	</tr>
+	{/volist}
+</table>
+<script>
+	function dele(t)
+	{
+		var uid = $(t).attr("uid");
+		if(confirm('确定删除吗?')==true)
+		{
+			window.location.href="/web/public/admin/user/dodelete?id="+uid;
+		}
+	}
+</script>

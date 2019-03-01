@@ -1,0 +1,14 @@
+<div class="col-md-4">
+                    <div class="page-header">
+                        <h2>
+                            热门排行
+                        </h2>
+                    </div>
+                    {volist name="pvList" id="art"}
+                        <a href="#" style="z-index: 0" class="list-group-item
+                        {eq name="$i" value="1"}
+                        active
+                        {/eq}">{:mb_substr($art.title,0,10)}<span class="badge">点击量:{$art.pv}</span></a>
+                    {/volist}
+                    </div>
+                </div>

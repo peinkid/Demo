@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+    
+    <head>
+        <meta charset="UTF-8">
+        <title>
+            {$title|default='首页'}
+        </title>
+        <link rel="stylesheet" href="/web/public/static/css/bootstrap.css">
+        <script src="/web/public/static/js/jquery-3.3.1.min.js">
+        </script>
+        <script src="/web/public/static/js/bootstrap.js">
+        </script>
+        <script src="/web/public/static/js/bootstrap.min.js">
+        </script>
+        
+    </head>
+    <body>
+    	<div class="container">
+    		<div class="row">
+    			<div class="col-md-12">
+    				{include file="public:nav" /}
+    			</div>
+
+    		</div>
+    		<div class="row">
+    			<div class="col-md-1"></div>
+    			<div class="col-md-2">
+    				{include file="public:left" /}
+    			</div>
+    			<div class="col-md-7">
+    				{__CONTENT__}
+    			</div>
+                <div class="col-md-2"></div>
+    		</div>
+    	</div>
+    </body>
+    </html>

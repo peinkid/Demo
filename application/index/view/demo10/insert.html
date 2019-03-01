@@ -1,0 +1,146 @@
+{include file="public::header" /}
+            {include file="public::nav" /}
+            <div class="row">
+    <div class="col-md-8">
+        <div class="page-header">
+            <h2>
+                发布话题
+            </h2>
+        </div>
+        <form  action="{:url('index/demo10/save')}"  method="post" id="save" enctype="multipart/form-data">
+            <input type="hidden" name="user_id" value="{$Think.session.user_id}">
+            
+            <div class="form-group">
+                <label for="title" class="control-label">
+                    标题:
+                </label>
+                
+                    <input type="text" name="title" class="form-control" id="title" placeholder="文章标题">
+                </div>
+
+                <div class="form-group">
+                <label for="title" class="control-label">
+                    分类:
+                </label>
+                <select name="cate_id" id="" class="form-control">
+                    {volist name="cateList" id="cate"}
+                    <option value="{$cate.id}">{$cate.name}</option>
+                    {/volist}
+                </select>
+                </div>
+
+                <div class="form-group">
+                <label for="title" class="control-label">
+                    内容:
+                </label>
+                    <textarea class="form-control" name="content" id="content" style="min-height: 250px"></textarea>
+                </div>
+
+                <div class="form-group">
+                <label for="title_image" class="control-label">
+                    标题图片:
+                </label>
+                </div>
+                <div id='hidden_img' style="position:relative;width:100px;height:100px;border:dashed;opacity:0.2">
+                    <div class="glyphicon glyphicon-plus" style="position:absolute;margin-left:40px;margin-top:39px;z-index:-1;"></div>
+                </div>
+                    <input type="file" name="title_image" class="" id="title_image" multiple="multiple" style="opacity:0;margin-top:-64px;margin-left:17px" placeholder="标题图片">
+                   <div id="imgdiv" class="" style="z-index:1">
+                    <img id="imgShow" width="200px";height="130px" style="margin-top:-60px"/> 
+                   </div>
+                <!-- <input type="file" name="title_image" id="title_image" multiple="multiple" onmouseout="readAsDataURL()" />  --> 
+    <!-- <input type="button" value="读取图像" onclick="readAsDataURL()" /> -->
+    <!-- <div id="result" name="result" style="width:600px;heigth:100px;"></div> -->
+                
+            
+            
+            <div id="wrapper" style="margin-top:60px">
+        <div id="container">
+            <!--头部，相册选择和格式选择-->
+            <div id="uploader">
+                <div class="queueList">
+                    <div id="dndArea" class="placeholder">
+                        <div id="filePicker"></div>
+                        <p>或将照片拖到这里，最多可选5张</p>
+                    </div>
+                </div>
+                <div class="statusBar" style="display:none;">
+                    <div class="progress">
+                        <span class="text">0%</span>
+                        <span class="percentage"></span>
+                    </div><div class="info"></div>
+                    <div class="btns">
+                        <div id="filePicker2"></div><div class="uploadBtn">开始上传</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+            
+
+
+
+
+
+            <div class="form-group" style="margin-top:25px;float:right">
+                
+                    <button type="submit" class="btn btn-primary" id="submit" style="float:left">
+                        保存
+                    </button>
+                
+            </div>
+        </form>
+        <script>
+        bkLib.onDomLoaded(function() {  
+    new nicEditor({iconsPath : '/web/public/static/js/nicEditorIcons.gif'}).panelInstance('content');
+});
+        </script>
+         <script>
+    window.onload = function () { 
+      new uploadPreview({ UpBtn: "title_image", DivShow: "imgdiv", ImgShow: "imgShow" });
+  }
+   </script>
+   <script type="text/javascript">
+  var div=document.getElementById('hidden_img')
+  document.getElementById('title_image').onmouseout=function()
+  {
+    if(document.getElementById('title_image').value!=0)
+    {
+        document.getElementById('hidden_img').style.opacity=0;
+    }
+    
+  }
+   </script>
+  
+  <script>  
+// var result=document.getElementById("result");  
+// var file=document.getElementById("title_image");  
+// var isread=true;  
+// function readAsDataURL(){  
+//  if(isread){
+//     var file = document.getElementById("title_image").files;
+//     var result=document.getElementById("result");  
+//     isread=false;
+//     for(i = 0; i< file.length; i ++) {
+//         var reader    = new FileReader();    
+//         reader.readAsDataURL(file[i]);  
+//         reader.onload=function(e){  
+//             //多图预览
+//             result.innerHTML = result.innerHTML + '<li style="float:left; width:140px; height:100px; margin-right:10px;list-style:none"><img src="' + this.result +'" alt="" style="width:140px;height:100px;" /></li>';  
+//         }
+
+//     }
+// }
+    
+// }  
+  
+</script> 
+<script src="/web/public/static/webuploader/examples/image-upload/jquery.js"></script>
+<script type="text/javascript" src="/web/public/static/webuploader/dist/webuploader.js"></script>
+<script src="/web/public/static/webuploader/examples/image-upload/upload.js"></script>
+
+    </div>
+    
+                {include file="public::right" /}
+            </div>
+        {include file="public::footer" /}

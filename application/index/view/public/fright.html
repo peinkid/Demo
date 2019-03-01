@@ -1,0 +1,20 @@
+<div class="col-md-4">
+                    <div class="page-header">
+                        <h2>
+                            我的关注
+                        </h2>
+                    </div>
+                    <div class="row pre-scrollable">
+                    <ul class="list-group">
+                    {volist name="flist" id="friend"}
+                    <li>
+                        <a href="{:url('demo10/flist',['friend_id'=>$friend.friend_id])}" class="list-group-item
+                        {eq name="$friend.friend_id" value="$Request.param.friend_id"}
+                        active
+                        {/eq}">{$friend.friend_id|getUserName}<span class="badge">发表文章:{$friend.friend_id|getUserNum}</span></a></li>
+                    {/volist}
+                </ul>
+            </div> 
+                    
+                    </div>
+                </div>

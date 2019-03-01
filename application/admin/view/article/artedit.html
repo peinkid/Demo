@@ -1,0 +1,71 @@
+{layout name="public:layout" /}
+<h4 class="text-center text-success">编辑文章</h4>
+<form  action="{:url('article/doEdit')}"  method="post"  enctype="multipart/form-data">
+            <input type="hidden" name="id" value="{$artInfo.id}">
+            
+            <div class="form-group">
+                <label for="title" class="control-label">
+                    标题:
+                </label>
+                
+                    <input type="text" name="title" class="form-control" id="title" value="{$artInfo.title}">
+                </div>
+
+                <div class="form-group">
+                <label for="title" class="control-label">
+                    分类:
+                </label>
+<!-- 隐藏当前分类 -->
+                <script type="text/javascript">
+$(function(){
+    var mySelect=$("#select option");
+    var num="{$cateNow.name}";//某个值
+    mySelect.each(function (i,el) {
+        if($(el).text()==num){
+            $(this).hide();
+        }
+    })
+})
+</script>
+                <select name="cate_id" class="form-control" id="select">
+                    <option>{$cateNow.name}</option>
+                    {volist name="cateList" id="cate"}
+                    <option value="{$cate.id}">{$cate.name}</option>
+                    {/volist}
+                </select>
+                </div>
+
+                <div class="form-group">
+                <label for="title" class="control-label">
+                    内容:
+                </label>
+                    <textarea class="form-control" name="content" id="content" style="min-height: 250px">
+                    	{$artInfo.content}
+                    </textarea>
+                </div>
+				<img src="/web/public/uploads/{$artInfo.title_image}" class="img-rounded" width="100">
+                <div class="form-group">
+                <label for="title_image" class="control-label">
+                    标题图片:
+                </label>
+                    <input type="file" name="title_image" class="form-control" id="title_image" >
+                </div>
+            
+            
+            
+            
+            <div class="form-group">
+                
+                    <button type="submit" class="btn btn-primary" id="submit">
+                        保存
+                    </button>
+                
+            </div>
+        </form>
+        {load href="/web/public/static/js/nicEdit.js" /}
+
+            <script>
+        bkLib.onDomLoaded(function() {  
+    new nicEditor({iconsPath : '/web/public/static/js/nicEditorIcons.gif'}).panelInstance('content');
+});
+        </script>

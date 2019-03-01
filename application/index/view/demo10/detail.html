@@ -1,0 +1,314 @@
+{include file="public::header" /}
+            {include file="public::nav" /}
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="page-header">
+                        <h2>
+                            {$art.cate_id|getCateName}
+                        </h2>
+                        
+                        
+                    </div>
+                    
+
+                    <div>
+                        
+                     <div>
+                        <div>
+                            <h4><a href="{:url('demo10/detail',['id'=>$art.id])}">{$art.title}</a></h4>
+                        </div>
+                        <div>
+                            <div>
+                            <img class="img-rounded" src="/web/public/uploads/{$art.title_image}" style="margin-right:15px;float:left;width:120px;height:110px"></div>
+                            <div style="padding-left:135px">
+                        <p>发布者:{$art.user_id|getUserName} &nbsp;&nbsp;&nbsp;&nbsp;
+                            <span class="glyphicon glyphicon-education" style="padding:0 1em">Lv{$art.user_id|getUserLv}</span>
+                        	发布时间:{$art.create_time} &nbsp;&nbsp;&nbsp;&nbsp;
+                           阅读量:{$art.pv} &nbsp;&nbsp;&nbsp;&nbsp;
+                       </p></div>
+                        <div style="width:750px;word-break:break-all;">
+                            <!-- {:htmlspecialchars_decode($art.content)} -->
+                            {$art.content|raw}
+                        </div>
+                    </div>
+                        <hr style="height: 2px;background-color: #6EECB4;border: none;">
+                        <div style="display:flex;justify-content:space-around">
+        <img height="60" width="60" src="/web/public/up_new/{$showimg.fir_image}" class="pimg"/ alt="">
+        <img height="60" width="60" src="/web/public/up_new/{$showimg.sec_image}" class="pimg"/ alt="">
+        <img height="60" width="60" src="/web/public/up_new/{$showimg.thi_image}" class="pimg"/ alt="">
+    </div>
+ 
+    <div id="outerdiv" style="position:fixed;top:0;left:0;background:rgba(0,0,0,0.7);z-index:2;width:100%;height:100%;display:none;">
+    <div id="innerdiv" style="position:absolute;">
+        <img id="bigimg" style="border:5px solid #fff;" src="" />
+    </div>
+</div>
+                        <hr style="height: 10px;background-color: #6EECB4;border: none;">
+                        <div style="padding:10px">
+                        <button class="btn btn-default" type="button" id="fav" user_id="{$art.user_id}" article_id="{$art.id}" session_id="{$Think.session.user_id}">
+                            {eq name="$art.id" value="$myFav.article_id"}
+                            取消收藏
+                            {else/}
+                            收藏
+                            {/eq}
+                        </button>
+                        <button class="btn btn-warning" type="button" id="like" user_id="{$art.user_id}" article_id="{$art.id}" session_id="{$Think.session.user_id}">
+                            {eq name="$art.id" value="$myLike.article_id"}
+                            取消点赞
+                            {else/}
+                            点赞
+                            {/eq}
+                        </button>
+                            {eq name="$art.user_id" value="$Think.session.user_id"}
+                            {else/}
+                            <button class="btn btn-primary glyphicon glyphicon-user" id="friend" user_id="{$art.user_id}" session_id="{$Think.session.user_id}" style="float:right">{eq name="$art.user_id" value="$myFri.friend_id"}取消关注{else/}关注好友{/eq}</button>
+                            {/eq}
+                        </div>
+                     </div>
+
+                    <div style="padding:10px 10px">
+                     <h4>发表评论</h4>
+                     <form class="form-horzontal" id="comment">
+                         <input type="hidden" name="article_id" value="{$art.id}">
+                         <input type="hidden" name="user_id" value="{$art.user_id}">
+                         <textarea name="content" id="" style="height:150px;width:730px;resize: none;"></textarea>
+                         <button type="button" class="btn btn-info" style="float:right" id="submit">发送</button>  
+                     </form>
+                 </div>
+                     <!-- <p class="text-success" id="res"></p> -->
+
+                     <script>
+                     $('#submit').on('click',function()
+                     {
+                        $.get("{:url('insertComment')}",$('#comment').serialize(),function(data)
+                        {
+                            if(data.status == 1)
+                            {
+                                alert(data.message);
+                                window.history.go(0);
+                            }
+                            else
+                            {
+                                alert(data.message);
+                                //window.history.go(0);
+                            }
+                        })
+                     })
+                     </script>
+                     <p style="margin-top:50px;font-size:18px;font-weight:700" class="title">用户评论</p>
+                     {volist name="commentList" id="comment" empty="没有评论"}
+                     <div style="display: flex;justify-content:space-between">
+                         <span style="color:#1E90FF;">{$comment.user_id|getUserName}:</span>
+                         <span style="color:black:;">{$comment.create_time}</span>
+                    </div>
+                    <div>
+                         <div style="color:black;line-height:15px;padding:3px 30px">{$comment.content|raw}</div>
+                     </div>
+                        <hr style="border-top:1px dotted #1E90FF;margin-left:10px;margin-top:8px">
+
+                     {/volist}
+
+
+                     <script>
+                     $(function()
+                     {
+                        $('#fav').on('click',function()
+                        {
+                            var userId=$(this).attr('user_id')
+                            var artId=$(this).attr('article_id')
+                            var sessionId=$(this).attr('session_id')
+                            if(userId && artId)
+                            {
+                                $.ajax(
+                                {
+                                    type:'get',
+                                    url:"{:url('index/demo10/fav')}",
+                                    data:
+                                    {
+                                        user_id:userId,
+                                        article_id:artId,
+                                        session_id:sessionId,
+                                        time:new Date().getTime()
+                                    },
+                                    dataType:'json',
+                                    success:function(data)
+                                {
+                                    switch(data.status)
+                                    {
+                                        case 1:
+                                        $('#fav').attr('class','btn btn-success')
+                                        $('#fav').text(data.message)
+                                        break;
+                                        case 0 :
+                                        $('#fav').attr('class','btn btn-default')
+                                        $('#fav').text(data.message)
+                                        break;
+                                        case -1:
+                                        alert(data.message)
+                                        break;
+                                        case -2:
+                                        alert(data.message)
+                                        window.location.href="{:url('index/user/login')}"
+                                        break;
+
+                                    }
+                                }
+                                })
+                            }
+                        });
+                        $('#friend').on('click',function()
+                        {
+                            //var userId=$(this).attr('user_id')
+                            var friendId=$(this).attr('user_id')
+                            var sessionId=$(this).attr('session_id')
+                            if(sessionId && friendId)
+                            {
+                                $.ajax(
+                                {
+                                    type:'get',
+                                    url:"{:url('index/demo10/friend')}",
+                                    data:
+                                    {
+                                        //user_id:userId,
+                                        friend_id:friendId,
+                                        session_id:sessionId,
+                                        time:new Date().getTime()
+                                    },
+                                    dataType:'json',
+                                    success:function(data)
+                                {
+                                    switch(data.status)
+                                    {
+                                        case 1:
+                                        $('#friend').attr('class','btn btn-danger glyphicon glyphicon-remove')
+                                        $('#friend').text(data.message)
+                                        break;
+                                        case 0 :
+                                        $('#friend').attr('class','btn btn-primary glyphicon glyphicon-user')
+                                        $('#friend').text(data.message)
+                                        break;
+                                        case -1:
+                                        alert(data.message)
+                                        break;
+                                        case -2:
+                                        alert(data.message)
+                                        window.location.href="{:url('index/user/login')}"
+                                        break;
+
+                                    }
+                                }
+                                })
+                            }
+                        });
+                     })
+                     </script>
+                     <script>
+                     $(function()
+                     {
+                        $('#like').on('click',function()
+                        {
+                            var userId=$(this).attr('user_id')
+                            var artId=$(this).attr('article_id')
+                            var sessionId=$(this).attr('session_id')
+                            if(userId && artId)
+                            {
+                                $.ajax(
+                                {
+                                    type:'get',
+                                    url:"{:url('index/demo10/like')}",
+                                    data:
+                                    {
+                                        user_id:userId,
+                                        article_id:artId,
+                                        session_id:sessionId,
+                                        time:new Date().getTime()
+                                    },
+                                    dataType:'json',
+                                    success:function(data)
+                                {
+                                    switch(data.status)
+                                    {
+                                        case 1:
+                                        $('#like').attr('class','btn btn-success')
+                                        $('#like').text(data.message)
+                                        break;
+                                        case 0 :
+                                        $('#like').attr('class','btn btn-warning')
+                                        $('#like').text(data.message)
+                                        break;
+                                        case -1:
+                                        alert(data.message)
+                                        break;
+                                        case -2:
+                                        alert(data.message)
+                                        window.location.href="{:url('index/user/login')}"
+                                        break;
+
+                                    }
+                                }
+                                })
+                            }
+                        })
+                     })
+                     </script>
+<script>  
+    $(function(){  
+        $(".pimg").click(function(){  
+            var _this = $(this);//将当前的pimg元素作为_this传入函数  
+            imgShow("#outerdiv", "#innerdiv", "#bigimg", _this);  
+        });  
+    });  
+
+    function imgShow(outerdiv, innerdiv, bigimg, _this){  
+        var src = _this.attr("src");//获取当前点击的pimg元素中的src属性  
+        $(bigimg).attr("src", src);//设置#bigimg元素的src属性  
+      
+            /*获取当前点击图片的真实大小，并显示弹出层及大图*/  
+        $("<img/>").attr("src", src).load(function(){  
+            var windowW = $(window).width();//获取当前窗口宽度  
+            var windowH = $(window).height();//获取当前窗口高度  
+            var realWidth = this.width;//获取图片真实宽度  
+            var realHeight = this.height;//获取图片真实高度  
+            var imgWidth, imgHeight;  
+            var scale = 0.8;//缩放尺寸，当图片真实宽度和高度大于窗口宽度和高度时进行缩放  
+              
+            if(realHeight>windowH*scale)
+            {  
+                imgHeight = windowH*scale;//如大于窗口高度，图片高度进行缩放  
+                imgWidth = imgHeight/realHeight*realWidth;//等比例缩放宽度  
+                if(imgWidth>windowW*scale)
+                {  
+                imgWidth = windowW*scale;//再对宽度进行缩放  
+                } 
+            } 
+            else if(realWidth>windowW*scale)
+            {  
+                imgWidth = windowW*scale;//如大于窗口宽度，图片宽度进行缩放  
+                imgHeight = imgWidth/realWidth*realHeight;//等比例缩放高度  
+            }
+            else
+            {  
+                imgWidth = realWidth;  
+                imgHeight = realHeight;  
+            }  
+                    $(bigimg).css("width",imgWidth);//以最终的宽度对图片缩放  
+              
+            var w = (windowW-imgWidth)/2;//计算图片与窗口左边距  
+            var h = (windowH-imgHeight)/2;//计算图片与窗口上边距  
+            $(innerdiv).css({"top":h, "left":w});//设置#innerdiv的top和left属性  
+            $(outerdiv).fadeIn("fast");//淡入显示#outerdiv及.pimg  
+        });  
+          
+        $(outerdiv).click(function()
+        {  
+            $(this).fadeOut("fast");  
+        });  
+    }  
+</script>
+                    </div>
+                    
+                    
+                </div>
+                {include file="public::right" /}
+            </div>
+        {include file="public::footer" /}

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+    
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+        <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
+        <title>
+            {$title|default='首页'}
+        </title>
+
+
+        <link rel="stylesheet" type="text/css" href="/web/public/static/webuploader/css/webuploader.css">
+        <link rel="stylesheet" type="text/css" href="/web/public/static/webuploader/examples/image-upload/style.css">
+        
+        <link rel="stylesheet" href="/web/public/static/css/bootstrap.css">
+        <script src="/web/public/static/js/jquery.js"></script>
+        <script src="/web/public/static/js/jquery.validate.js"></script>
+        <script src="/web/public/static/js/bootstrap.js"></script>
+        <script src="/web/public/static/js/uploadPreview.js" type="text/javascript"></script>
+        {load href="/web/public/static/js/nicEdit.js" /}
+        <script>
+    var deviceWidth = parseInt(window.screen.width);  //获取当前设备的屏幕宽度
+    var deviceScale = deviceWidth / 640;  //得到当前设备屏幕与640之间的比例，之后我们就可以将网页宽度固定为640px
+    var ua = navigator.userAgent;
+    //获取当前设备类型（安卓或苹果）
+    if (/Android (\d+\.\d+)/.test(ua)) {
+        var version = parseFloat(RegExp.$1);
+        if (version > 2.3) {
+            document.write('<meta name="viewport" content="width=640,initial-scale=' + deviceScale + ', minimum-scale = ' + deviceScale + ', maximum-scale = ' + deviceScale + ', target-densitydpi=device-dpi">');
+        } else {
+            document.write('<meta name="viewport" content="width=640,initial-scale=0.75,maximum-scale=0.75,minimum-scale=0.75,target-densitydpi=device-dpi" />');
+        }
+    } else {
+        document.write('<meta name="viewport" content="width=640, user-scalable=no">');
+    }
+</script>
+
+    </head>
+    <style type="text/css">
+    body
+    {
+        min-width: 1200px;
+    }
+    #inputEmail1-error,#inputEmail2-error,#inputEmail3-error,#inputPassword4-error,#inputPassword5-error
+    {
+        color: red;
+    }
+    </style>
+    
+    <body>
+        <div class="container">
